@@ -1,0 +1,28 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "Lua.runtime.version": "LuaJIT",
+        "Lua.runtime.special": {
+            "love.filesystem.load": "loadfile"
+        },
+        "Lua.workspace.library": [
+            "C:\\Visual Studio Code\\",
+            "${3rd}/love2d/library"
+        ]
+    },
+    "launch": {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "type": "lua",
+                "request": "launch",
+                "name": "Debug",
+                "program": "${workspaceFolder}/main.lua"
+            }
+        ]
+    }
+}
