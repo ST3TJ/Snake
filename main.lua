@@ -257,7 +257,8 @@ local snake = {
     snake.menu = function()
         color(0.556, 0.709, 0.274):set(true)
 
-        gui.add_button(window / 2, vector(200, 50), 'Play', color(0.5), true)
+        --TODO: Fucking gui system
+        --gui.add_button(window / 2, vector(200, 50), 'Play', color(0.5), true)
     end
 
     ---Main render function
