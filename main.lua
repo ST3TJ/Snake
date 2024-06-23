@@ -35,14 +35,16 @@ local snake = {
 
     -- Player info
     score = 0,               -- Amount of eated apples
-    growth_amount = 0,
+    growth_amount = 0,       --The value of how much you need to increase the length of the snake
 } do
+    ---A function that adds a new part of the snake's body
     ---@param origin vector
     snake.new_body_part = function(origin)
         table.insert(snake.body, origin)
         table.insert(snake.animated_body, origin)
     end
 
+    ---Snake reset function
     snake.reset = function()
         snake.body = {}
         snake.animated_body = {}
@@ -51,6 +53,7 @@ local snake = {
         snake.score = 0
     end
 
+    ---The function that forms the snake data
     snake.setup = function()
         love.graphics.setFont(love.graphics.newFont(24))
 
@@ -72,6 +75,7 @@ local snake = {
         snake.settuped = true
     end
 
+    ---The function of getting all the free cells
     ---@return table
     snake.get_free_cells = function()
         local map = {}
@@ -106,6 +110,7 @@ local snake = {
         return heap
     end
 
+    ---The function of getting a random empty cell
     ---@return vector|nil
     snake.get_random_free_cell = function()
         local free_cells = snake.get_free_cells()
@@ -117,20 +122,24 @@ local snake = {
         return free_cells[math.random(1, #free_cells)]
     end
 
+    ---The function of adding an apple to the map
     snake.add_apple = function()
         table.insert(snake.apples, snake.get_random_free_cell())
     end
 
+    ---The function of checking the possibility of the snake's existence
     ---@return boolean
     snake.is_valid = function()
         return snake.settuped and snake.alive
     end
 
+    ---Returns the snake's head / snake.body[1]
     ---@return vector
     snake.get_head = function()
         return snake.body[1]
     end
 
+    ---A function that determines the legality of the next movement
     ---@param direction vector
     ---@return boolean
     snake.is_move_legal = function(direction)
@@ -140,6 +149,7 @@ local snake = {
         return predicted_position ~= snake.body[2]
     end
 
+    ---Is the snake located within the boundaries of the map
     ---@param origin vector
     ---@param from vector
     ---@param to vector
@@ -148,6 +158,7 @@ local snake = {
         return origin.x >= from.x and origin.x <= to.x and origin.y >= from.y and origin.y <= to.y
     end
 
+    ---Snake collision calculation function
     ---@return boolean
     snake.is_collided = function()
         local head = snake.get_head()
@@ -168,6 +179,7 @@ local snake = {
         return false
     end
 
+    ---Motion processing function on the client
     snake.clmove = function()
         for button, direction in pairs(moves) do
             if love.keyboard.isDown(button) then
@@ -176,11 +188,13 @@ local snake = {
         end
     end
 
+    ---Returns where the snake is moving now
     ---@return vector
     snake.get_move_direction = function()
         return snake.client_last_move
     end
 
+    ---Main movement code
     snake.createmove = function()
         if not snake.is_valid() then
             return
@@ -205,6 +219,7 @@ local snake = {
             last_origin = origin
         end
 
+        -- If need to grow, then add a new body part to the end of the snake and create a new apple
         if snake.growth_amount > 0 then
             snake.new_body_part(last_origin)
             snake.growth_amount = snake.growth_amount - 1
@@ -212,6 +227,7 @@ local snake = {
         end
     end
 
+    ---Calculation after move
     snake.postmove = function()
         local head = snake.get_head()
 
@@ -229,6 +245,7 @@ local snake = {
         end
     end
 
+    ---Snake animations update
     snake.update_animations = function()
         for i = 1, #snake.animated_body do
             local origin = snake.animated_body[i]
@@ -236,12 +253,15 @@ local snake = {
         end
     end
 
+    ---Menu's render
     snake.menu = function()
         color(0.556, 0.709, 0.274):set(true)
 
-        gui.add_button(window / 2, vector(200, 50), 'Play', color(0.5), true)
+        --TODO: Fucking gui system
+        --gui.add_button(window / 2, vector(200, 50), 'Play', color(0.5), true)
     end
 
+    ---Main render function
     snake.render = function()
         if not snake.is_valid() then
             snake.menu()
@@ -295,6 +315,8 @@ local snake = {
         end
     end
 
+    ---Main function
+    ---@param dt number
     snake.main = function(dt)
         if not snake.is_valid() then
             return
