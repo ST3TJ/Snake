@@ -1,7 +1,5 @@
 require 'header'
 
-print(1)
-
 --[[
     1. Improve animations
         a. Die only if animated head collided
